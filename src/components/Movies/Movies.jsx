@@ -4,12 +4,26 @@ import axios from '../../axios-orders'
 import Movie from './Movie/Movie'
 import Spinner from '../UI/Spinner/Spinner'
 import Error from '../UI/Error/Error'
+import Modal from '../UI/Modal/Modal'
+import ModalMovie from './ModalMovie/ModalMovie'
 import classes from './Movies.module.css'
 
 const Movies = () => {
 
   const [movie, setMovie] = useState([])
   const [errormsg, setErrormsg] = useState(null)
+  const [open, setOpen] = useState(false)
+  const [selectMovie, setSelectMovie] = useState(null)
+
+  const handleOpen = (id) => {
+    setOpen(true)
+    setSelectMovie(id)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+    // console.log('ddd');
+  }
 
   const series = ['marvel', 'avengers', 'iron man', 'harry potter', '3 idiots']
 
@@ -39,14 +53,19 @@ const Movies = () => {
         movieTitle={mov.Title}
         moviePostal={mov.Poster}
         movieYear={mov.Year}
-        movieType={mov.Type} />
+        movieType={mov.Type}
+        handleOpen={() => handleOpen(mov.imdbID)} />
     )))
   }
-
 
   return (
     <React.Fragment>
       <h1>Your Movies</h1>
+      <Modal
+        modalOpen={open}
+        modalClose={handleClose}>
+          <ModalMovie dataInfo={selectMovie} />
+          </Modal>
       <div className={classes.Movies}>
         {movieData}
       </div>
