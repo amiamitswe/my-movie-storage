@@ -1,0 +1,9 @@
+.Movies {
+  width: 100%;
+  padding: 0 2%;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+}

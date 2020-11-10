@@ -1,0 +1,36 @@
+.Movie {
+  width: 20%;
+  margin: .5% 2%;
+}
+
+.Movie h1 {
+  font-size: 20px;
+  min-height: 45px;
+}
+
+.Movie img {
+  width: 100%;
+  height: auto;
+}
+
+.Movie span {
+  font-size: 16px;
+  font-weight: 300;
+  text-transform: capitalize;
+  margin-left: 50px;
+}
+
+@media (max-width: 767px) {
+  .Movie {
+    width: 45%;
+  }
+
+  .Movie h1 {
+    font-size: 18px;
+    min-height: 40px;
+  }
+
+  .Movie span {
+    margin-left: 20px;
+  }
+}
