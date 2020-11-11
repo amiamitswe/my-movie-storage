@@ -3,7 +3,7 @@ import classes from './Spinner.module.css'
 
 const Spinner = () => {
   return (
-    <figure>
+    <figure className={classes.Spinner}>
       <div className={[classes.dot, classes.four].join(' ')} />
       <div className={[classes.dot, classes.three].join(' ')} />
       <div className={[classes.dot, classes.two].join(' ')} />
@@ -12,4 +12,11 @@ const Spinner = () => {
   )
 }
 
-export default Spinner
+
+const Spinner2 = () => {
+  return (
+    <div className={classes.loader}>Loading...</div>
+  )
+}
+
+export { Spinner, Spinner2 }

@@ -1,8 +1,9 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
+import React, { useContext } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import Modal from '@material-ui/core/Modal'
+import Backdrop from '@material-ui/core/Backdrop'
+import Fade from '@material-ui/core/Fade'
+import ThemeContext from '../../../context/Context'
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -11,15 +12,19 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   paper: {
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
+    // backgroundColor: theme.palette.background.paper,
+    width: '80%',
+    height: '80%',
+    overflowY: 'auto',
     boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
+    padding: '30px 32px 20px',
+
   },
-}));
+}))
 
 export default function TransitionsModal(props) {
-  const classes = useStyles();
+  const classes = useStyles()
+  const themeData = useContext(ThemeContext)
   // const [open, setOpen] = React.useState(false);
 
   // const handleOpen = () => {
@@ -30,11 +35,19 @@ export default function TransitionsModal(props) {
   //   setOpen(false);
   // };
 
+  let style = {
+    color: '#050505',
+    background: '#fff'
+  }
+  if (themeData) {
+    style = {
+      color: '#fff',
+      background: '#18191a'
+    }
+  }
+
   return (
-    <div>
-      {/* <button type="button" onClick={handleOpen}>
-        react-transition-group
-      </button> */}
+    <React.Fragment>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -46,13 +59,14 @@ export default function TransitionsModal(props) {
         BackdropProps={{
           timeout: 500,
         }}
+
       >
         <Fade in={props.modalOpen}>
-          <div className={classes.paper}>
+          <div className={classes.paper} style={style}>
             {props.children}
           </div>
         </Fade>
       </Modal>
-    </div>
-  );
+    </React.Fragment>
+  )
 }

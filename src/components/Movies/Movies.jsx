@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react'
 import axios from '../../axios-orders'
 
 import Movie from './Movie/Movie'
-import Spinner from '../UI/Spinner/Spinner'
+import { Spinner } from '../UI/Spinner/Spinner'
 import Error from '../UI/Error/Error'
 import Modal from '../UI/Modal/Modal'
 import ModalMovie from './ModalMovie/ModalMovie'
 import classes from './Movies.module.css'
 
 const Movies = () => {
-
+  
   const [movie, setMovie] = useState([])
   const [errormsg, setErrormsg] = useState(null)
   const [open, setOpen] = useState(false)
@@ -22,7 +22,6 @@ const Movies = () => {
 
   const handleClose = () => {
     setOpen(false)
-    // console.log('ddd');
   }
 
   const series = ['marvel', 'avengers', 'iron man', 'harry potter', '3 idiots']
@@ -30,7 +29,7 @@ const Movies = () => {
   useEffect(() => {
     const API_KEY = '747adb9e'
     const promise = series.map(series => {
-      return axios.get(`/?s=${encodeURIComponent(series)}=&apikey=${API_KEY}`)
+      return axios.get(`/?apikey=${API_KEY}&s=${encodeURIComponent(series)}`)
         .then(res => res.data.Search)
     })
 
@@ -49,6 +48,7 @@ const Movies = () => {
   if (movie.length > 0) {
     movieData = movie.map(res => res.map(mov => (
       <Movie
+      style={{zIndex: '9999'}}
         key={mov.imdbID}
         movieTitle={mov.Title}
         moviePostal={mov.Poster}
@@ -61,11 +61,13 @@ const Movies = () => {
   return (
     <React.Fragment>
       <h1>Your Movies</h1>
+
       <Modal
+
         modalOpen={open}
         modalClose={handleClose}>
-          <ModalMovie dataInfo={selectMovie} />
-          </Modal>
+        <ModalMovie dataInfo={selectMovie} />
+      </Modal>
       <div className={classes.Movies}>
         {movieData}
       </div>
