@@ -1,6 +1,6 @@
 import axios from 'axios'
 const instance = axios.create({
-  baseURL: `http://www.omdbapi.com`
+  baseURL: `https://www.omdbapi.com`
 })
 
 export default instance
