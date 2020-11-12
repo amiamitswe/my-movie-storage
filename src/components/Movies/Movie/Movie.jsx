@@ -5,16 +5,16 @@ const Movie = ({ movieTitle, moviePostal, movieYear, movieType, handleOpen }) =>
 
   const limitTitle = (text, value = 30) => {
     const result = []
-    if (text.length > value) {
-      text.split(' ').reduce((acc, cur) => {
-        if (acc + cur.length <= value) {
-          result.push(cur)
-        }
-        return acc += cur.length
-      }, 0)
-
-      return (result.join(' ') + ' ...')
-
+    if (movieTitle) {
+      if (text.length > value) {
+        text.split(' ').reduce((acc, cur) => {
+          if (acc + cur.length <= value) {
+            result.push(cur)
+          }
+          return acc += cur.length
+        }, 0)
+        return (result.join(' ') + ' ...')
+      }
     }
     return text
   }

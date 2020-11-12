@@ -35,11 +35,12 @@ export default function TransitionsModal(props) {
   //   setOpen(false);
   // };
 
+
   let style = {
     color: '#050505',
     background: '#fff'
   }
-  if (themeData) {
+  if (themeData.darkMood) {
     style = {
       color: '#fff',
       background: '#18191a'
