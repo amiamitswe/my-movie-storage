@@ -1,8 +1,10 @@
 import React from 'react'
 
 import { fade, makeStyles } from '@material-ui/core/styles'
-import { AppBar, Switch, IconButton, Toolbar, Typography, InputBase } from '@material-ui/core'
+import { createMuiTheme, AppBar, Switch, IconButton, Toolbar, Typography, InputBase, MenuItem, FormControl, Select } from '@material-ui/core'
 import { Menu as MenuIcon, Search as SearchIcon } from '@material-ui/icons'
+import { ThemeProvider } from '@material-ui/styles'
+
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -25,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
-    // marginRight: theme.spacing(2),
     marginLeft: 0,
     width: '100%',
     [theme.breakpoints.up('sm')]: {
@@ -47,21 +48,54 @@ const useStyles = makeStyles((theme) => ({
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 1),
-    // // vertical padding + font size from searchIcon
-    // paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
       width: '20ch',
     },
   },
-  root: {
-    '& > *': {
-      margin: theme.spacing(1),
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 70,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(0),
+    color: '#fff',
+    '&::after': {
+      borderColor: '#fff'
+    }
+  },
+  selectRoot: {
+    background: '#4a4c5a',
+    paddingRight: '14px !important',
+
+    '&:focus': {
+      background: '#4a4c5a'
+    },
+    '&:hover': {
+      background: '#ffffff40',
+      borderBottom: 'none'
     },
   },
-
+  arrowIcon: {
+    color: 'inherit'
+  },
+  track: {
+    background: '#fff'
+  },
+  switchBase: {
+    color: '#fff'
+  }
 }))
+
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#636364',
+    }
+  },
+})
 
 export default function PrimarySearchAppBar(props) {
   const classes = useStyles()
@@ -74,6 +108,12 @@ export default function PrimarySearchAppBar(props) {
     setState({ ...state, [event.target.name]: event.target.checked })
     props.darkMood()
   }
+
+  const selectYearForMovie = []
+  for (let i = 1990; i <= new Date().getFullYear(); i++) {
+    selectYearForMovie.unshift(i)
+  }
+
 
   return (
     <div className={classes.grow}>
@@ -91,9 +131,6 @@ export default function PrimarySearchAppBar(props) {
             My Movie Storages
           </Typography>
           <div className={classes.search}>
-            {/* <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div> */}
             <InputBase
               placeholder="Search Movie…"
               classes={{
@@ -113,16 +150,48 @@ export default function PrimarySearchAppBar(props) {
             <SearchIcon />
           </IconButton>
 
+          <FormControl
+            className={classes.formControl}
+          >
+            <Select
+              disabled={!props.enableYear}
+              value={props.year}
+              onChange={props.selectYear}
+              displayEmpty
+              className={classes.selectEmpty}
+              inputProps={{ 'aria-label': 'Without label' }}
+
+              classes={{
+                root: classes.selectRoot,
+                icon: classes.arrowIcon,
+              }}
+            >
+              <MenuItem value="">
+                <em>Year</em>
+              </MenuItem>
+
+              {selectYearForMovie.map(el => (
+                <MenuItem key={el} value={el}>{el}</MenuItem>))
+              }
+            </Select>
+          </FormControl>
+
           <div className={classes.grow} />
 
           <div>
-            <Switch
-              checked={state.checkedB}
-              onChange={handleChange}
-              color="primary"
-              name="checkedB"
-              inputProps={{ 'aria-label': 'primary checkbox' }}
-            />
+            <ThemeProvider theme={theme}>
+              <Switch
+                classes={{
+                  switchBase: classes.switchBase,
+                  track: classes.track
+                }}
+                checked={state.checkedA}
+                onChange={handleChange}
+                color='primary'
+                name="checkedA"
+                inputProps={{ 'aria-label': 'primary checkbox' }}
+              />
+            </ThemeProvider>
           </div>
         </Toolbar>
       </AppBar>

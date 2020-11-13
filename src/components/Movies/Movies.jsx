@@ -11,12 +11,26 @@ import classes from './Movies.module.css'
 
 const Movies = () => {
 
+  const searchMovie = useContext(SearchMovie).searchMovie
+  const movieByYear = useContext(SearchMovie).movieByYear
+
   const [movie, setMovie] = useState([])
   const [errormsg, setErrormsg] = useState()
   const [open, setOpen] = useState(false)
   const [selectMovie, setSelectMovie] = useState(null)
+  const [year, setyear] = useState()
+  const [searchByMovie, setSearchByMovie] = useState(null)
 
-  const searchMovie = useContext(SearchMovie).searchMovie
+  const API_KEY = '747adb9e'
+
+
+  if (year !== movieByYear) {
+    setyear(movieByYear)
+  }
+
+  if (searchByMovie !== searchMovie) {
+    setSearchByMovie(searchMovie)
+  }
 
   const handleOpen = (id) => {
     setOpen(true)
@@ -29,7 +43,6 @@ const Movies = () => {
 
   const defaultMovie = () => {
     let series = ['marvel', 'avengers', 'iron man', 'harry potter', '3 idiots']
-    const API_KEY = '747adb9e'
     const promise = series.map(series => {
       return axios.get(`/?apikey=${API_KEY}&s=${encodeURIComponent(series)}`)
         .then(res => res.data.Search)
@@ -42,30 +55,40 @@ const Movies = () => {
   }
 
   const searchForMovie = () => {
-    const API_KEY = '747adb9e'
-    axios.get(`/?apikey=${API_KEY}&s=${encodeURIComponent(searchMovie)}`)
+    axios.get(`/?apikey=${API_KEY}&s=${encodeURIComponent(searchByMovie)}`)
+      .then((rs) => !rs.data.hasOwnProperty('Error') ? setMovie(rs.data.Search) : setMovie(''))
+      .catch(error => setErrormsg(error.message))
+  }
+
+  const testooo = () => {
+    axios.get(`/?apikey=${API_KEY}&s=${encodeURIComponent(searchByMovie)}&y=${year}`)
       .then((rs) => !rs.data.hasOwnProperty('Error') ? setMovie(rs.data.Search) : setMovie(''))
       .catch(error => setErrormsg(error.message))
   }
 
 
   useEffect(() => {
-    if (searchMovie === null) {
-      defaultMovie()
+    if (movieByYear !== '') {
+      testooo()
+    }
+
+    else if (searchByMovie !== null) {
+      searchForMovie()
     }
     else {
-      searchForMovie()
+      defaultMovie()
     }
 
     return () => {
       setMovie([])
+      setyear()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchMovie])
+  }, [searchByMovie, movieByYear])
 
 
   let movieData = <Spinner />
-  if (searchMovie === null) {
+  if (searchByMovie === null && movieByYear === '') {
     if (errormsg) {
       movieData = <Error>{errormsg.message}</Error>
     }
@@ -87,7 +110,9 @@ const Movies = () => {
 
   else {
     if (movie === "") {
-      movieData = <Error>No data found in this name <b><u>{searchMovie}</u></b> </Error>
+      movieData = <Error>No MOVIES found in this name "<b>
+        <u>{searchByMovie}</u></b>{year !== '' ?
+          <span>" in "<b><u>{year}</u></b>" year </span> : null} Sorry !!! </Error>
     }
     else {
       if (errormsg) {
