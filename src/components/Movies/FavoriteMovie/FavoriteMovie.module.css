@@ -1,0 +1,37 @@
+.FavoriteList {
+  position: fixed;
+  top: 70px;
+  right: 25px;
+  z-index: 99;
+  color: red;
+}
+
+.FavoriteList:hover {
+  cursor: pointer;
+  transform: scale(1.2);
+  animation-name: favoriteAnimation;
+  animation-duration: .2s;
+}
+
+.FavoriteList .FavoriteListIcon {
+  font-size: 40px;
+}
+
+.FMovieList {
+  position: fixed;
+  right: 35px;
+  z-index: 99;
+  min-width: 320px;
+}
+
+@media (max-width: 767px) {
+  .FavoriteList {
+    right: 11px;
+  }
+}
+
+@keyframes favoriteAnimation {
+  0%   {transform: scale(1);}
+  75%  {transform: scale(1.4);}
+  100% {transform: scale(1.2);}
+}

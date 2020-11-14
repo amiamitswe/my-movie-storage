@@ -2,15 +2,14 @@ import React from 'react'
 
 import { fade, makeStyles } from '@material-ui/core/styles'
 import { createMuiTheme, AppBar, Switch, IconButton, Toolbar, Typography, InputBase, MenuItem, FormControl, Select } from '@material-ui/core'
-import { Menu as MenuIcon, Search as SearchIcon } from '@material-ui/icons'
+import { Home as HomeIcon, Search as SearchIcon } from '@material-ui/icons'
 import { ThemeProvider } from '@material-ui/styles'
-
 
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
   },
-  menuButton: {
+  homeButton: {
     marginRight: theme.spacing(2),
   },
   title: {
@@ -80,6 +79,9 @@ const useStyles = makeStyles((theme) => ({
   arrowIcon: {
     color: 'inherit'
   },
+  switch: {
+    marginRight: '-6px'
+  },
   track: {
     background: '#fff'
   },
@@ -121,11 +123,11 @@ export default function PrimarySearchAppBar(props) {
         <Toolbar>
           <IconButton
             edge="start"
-            className={classes.menuButton}
+            className={classes.homeButton}
             color="inherit"
             aria-label="open drawer"
           >
-            <MenuIcon />
+            <HomeIcon />
           </IconButton>
           <Typography onClick={props.goHome} className={classes.title} variant="h6" noWrap>
             My Movie Storages
@@ -178,21 +180,20 @@ export default function PrimarySearchAppBar(props) {
 
           <div className={classes.grow} />
 
-          <div>
-            <ThemeProvider theme={theme}>
-              <Switch
-                classes={{
-                  switchBase: classes.switchBase,
-                  track: classes.track
-                }}
-                checked={state.checkedA}
-                onChange={handleChange}
-                color='primary'
-                name="checkedA"
-                inputProps={{ 'aria-label': 'primary checkbox' }}
-              />
-            </ThemeProvider>
-          </div>
+          <ThemeProvider theme={theme} >
+            <Switch
+              classes={{
+                root: classes.switch,
+                switchBase: classes.switchBase,
+                track: classes.track
+              }}
+              checked={state.checkedA}
+              onChange={handleChange}
+              color='primary'
+              name="checkedA"
+              inputProps={{ 'aria-label': 'primary checkbox' }}
+            />
+          </ThemeProvider>
         </Toolbar>
       </AppBar>
     </div>

@@ -7,6 +7,7 @@ import Error from '../UI/Error/Error'
 import Modal from '../UI/Modal/Modal'
 import ModalMovie from './ModalMovie/ModalMovie'
 import SearchMovie from '../../context/Context'
+import FavoriteList from './FavoriteMovie/FavoriteMovie'
 import classes from './Movies.module.css'
 
 const Movies = () => {
@@ -20,9 +21,9 @@ const Movies = () => {
   const [selectMovie, setSelectMovie] = useState(null)
   const [year, setyear] = useState()
   const [searchByMovie, setSearchByMovie] = useState(null)
+  const [favoriteID, setFavoriteID] = useState([])
 
   const API_KEY = '747adb9e'
-
 
   if (year !== movieByYear) {
     setyear(movieByYear)
@@ -60,7 +61,7 @@ const Movies = () => {
       .catch(error => setErrormsg(error.message))
   }
 
-  const testooo = () => {
+  const searchForMovieWithYear = () => {
     axios.get(`/?apikey=${API_KEY}&s=${encodeURIComponent(searchByMovie)}&y=${year}`)
       .then((rs) => !rs.data.hasOwnProperty('Error') ? setMovie(rs.data.Search) : setMovie(''))
       .catch(error => setErrormsg(error.message))
@@ -69,7 +70,7 @@ const Movies = () => {
 
   useEffect(() => {
     if (movieByYear !== '') {
-      testooo()
+      searchForMovieWithYear()
     }
 
     else if (searchByMovie !== null) {
@@ -87,6 +88,38 @@ const Movies = () => {
   }, [searchByMovie, movieByYear])
 
 
+  const setFavoritehandler = (id) => {
+    const favoriteData = [...favoriteID]
+
+    const findFavoritID = favoriteData.findIndex(el => el === id)
+
+    if (findFavoritID === -1) {
+      favoriteData.push(id)
+    }
+
+    else {
+      favoriteData.splice(findFavoritID, 1)
+    }
+
+    setFavoriteID(favoriteData)
+  }
+
+  const checkfavoriteID = (id) => favoriteID.some(el => el === id)
+
+  const renderMovies = (mov, index) => {
+    return <Movie
+      style={{ zIndex: '9999' }}
+      key={index + `${mov.imdbID}`}
+      movieTitle={mov.Title}
+      moviePostal={mov.Poster}
+      movieYear={mov.Year}
+      movieType={mov.Type}
+      setFavorite={() => setFavoritehandler(mov.imdbID)}
+      ifFavorite={checkfavoriteID(mov.imdbID)}
+      handleOpen={() => handleOpen(mov.imdbID)} />
+  }
+
+
   let movieData = <Spinner />
   if (searchByMovie === null && movieByYear === '') {
     if (errormsg) {
@@ -94,15 +127,8 @@ const Movies = () => {
     }
     else {
       if (movie.length > 0) {
-        movieData = movie.map(res => res.map(mov => (
-          <Movie
-            style={{ zIndex: '9999' }}
-            key={mov.imdbID}
-            movieTitle={mov.Title}
-            moviePostal={mov.Poster}
-            movieYear={mov.Year}
-            movieType={mov.Type}
-            handleOpen={() => handleOpen(mov.imdbID)} />
+        movieData = movie.map(res => res.map((mov, index) => (
+          renderMovies(mov, index)
         )))
       }
     }
@@ -120,16 +146,7 @@ const Movies = () => {
       }
 
       if (movie.length > 0) {
-        movieData = movie.map((mov, index) =>
-          <Movie
-            style={{ zIndex: '9999' }}
-            key={index + `${mov.imdbID}`}
-            movieTitle={mov.Title}
-            moviePostal={mov.Poster}
-            movieYear={mov.Year}
-            movieType={mov.Type}
-            handleOpen={() => handleOpen(mov.imdbID)} />
-        )
+        movieData = movie.map((mov, index) => renderMovies(mov, index))
       }
     }
   }
@@ -139,6 +156,9 @@ const Movies = () => {
       <h1>Your Movies</h1>
 
       <div className={classes.Movies}>
+        {favoriteID.length > 0 ?
+          <FavoriteList favoriteMovies={favoriteID} /> : null}
+
         {movieData}
       </div>
 

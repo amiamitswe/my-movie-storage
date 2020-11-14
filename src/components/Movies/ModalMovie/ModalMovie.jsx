@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import axios from '../../../axios-orders'
 import { Spinner2 } from '../../UI/Spinner/Spinner'
 import Error from '../../UI/Error/Error'
+import IMG from '../../../assets/IMG/move_if_not_found.jpg'
 import classes from './ModalMovie.module.css'
 
 const ModalMovie = (props) => {
@@ -36,7 +37,7 @@ const ModalMovie = (props) => {
         <div className={classes.ModalMovie}>
 
           <div className={classes.MoviePostal}>
-            <img src={movieData.Poster} alt={movieData.Title} />
+            <img src={movieData.Poster !== 'N/A' ? movieData.Poster : IMG} alt={movieData.Title} />
             <h1 style={{textAlign: 'center'}}>{movieData.Year}</h1>
           </div>
 

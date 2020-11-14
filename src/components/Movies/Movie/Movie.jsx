@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
+import FavoriteIcon from '@material-ui/icons/Favorite'
 
+import ThemeMood from '../../../context/Context'
+import IMG from '../../../assets/IMG/move_if_not_found.jpg'
 import classes from './Movie.module.css'
 
-const Movie = ({ movieTitle, moviePostal, movieYear, movieType, handleOpen }) => {
+const Movie = ({ movieTitle, moviePostal, movieYear, movieType, ifFavorite, setFavorite, handleOpen }) => {
+
+  const themeMood = useContext(ThemeMood).darkMood
 
   const limitTitle = (text, value = 30) => {
     const result = []
@@ -21,12 +26,22 @@ const Movie = ({ movieTitle, moviePostal, movieYear, movieType, handleOpen }) =>
     return text
   }
 
+
   return (
-    <div onClick={handleOpen} className={classes.Movie}>
-      <h1>{limitTitle(movieTitle)}</h1>
-      <img src={moviePostal} alt={movieTitle} />
-      <h3>Release year : {movieYear}</h3>
-      <h4 className={classes.MovieType}>type : {movieType}</h4>
+    <div className={classes.Movie}>
+      <div className={classes.FevoritWrap}>
+        <h1 onClick={handleOpen}>{limitTitle(movieTitle)}</h1>
+        <FavoriteIcon 
+        onClick={setFavorite} 
+        style={{ color: ifFavorite ? '#fd0939c9' : themeMood ? '#fff' : '#4a4c5a' }} 
+        className={classes.Fevorit} />
+
+      </div>
+      <div onClick={handleOpen} >
+        <img src={moviePostal !== 'N/A' ? moviePostal : IMG} alt={movieTitle} />
+        <h3>Release year : {movieYear}</h3>
+        <h4 className={classes.MovieType}>type : {movieType}</h4>
+      </div>
     </div>
   )
 }
@@ -37,6 +52,6 @@ Movie.propTypes = {
   moviePostal: PropTypes.string,
   movieYear: PropTypes.string,
   movieType: PropTypes.string
-};
+}
 
 export default Movie
