@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { API } from '../../../../API/API'
+
 import axios from '../../../../axios-orders'
 import { Spinner2 } from '../../../UI/Spinner/Spinner'
 import { makeStyles } from '@material-ui/core/styles'
@@ -9,14 +11,13 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import Avatar from '@material-ui/core/Avatar'
 import Typography from '@material-ui/core/Typography'
 
+
+// material ui style
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
-    maxWidth: '36ch',
-    backgroundColor: theme.palette.background.paper,
     height: '70vh',
     overflow: 'auto',
-    boxShadow: '0px 1px 100px #000',
+    boxShadow: '0px 1px 15px 10px #464443',
     padding: '0'
   },
   inline: {
@@ -37,18 +38,27 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: '#4a4c5a3d',
       cursor: 'pointer'
-    } 
+    }
+  },
+  mTitle: {
+    margin: '0',
+    lineHeight: '1',
+    fontSize: '1.15rem',
+    marginBottom: '5px'
   }
 }))
 
-export default function AlignItemsList({ movieData }) {
+const AlignItemsList = ({ movieData }) => {
+  // use material style
   const classes = useStyles()
+
   const MOVIE_IDs = movieData
-  const API_KEY = '747adb9e'
 
   const [fMovieListData, setFMovieListData] = useState([])
 
+  // render data from api
   useEffect(() => {
+    const API_KEY = API
     const promise = MOVIE_IDs.map(movieID => {
       return axios.get(`/?i=${movieID}&apikey=${API_KEY}`)
         .then(res => res.data)
@@ -59,8 +69,8 @@ export default function AlignItemsList({ movieData }) {
       .catch(err => console.log(err.message))
   }, [MOVIE_IDs])
 
-  console.log(fMovieListData)
 
+  // title limit
   const limitTitle = (text, value = 20) => {
     const result = []
     if (text.length > value) {
@@ -84,20 +94,24 @@ export default function AlignItemsList({ movieData }) {
     renderFMovieData = fMovieListData.map(mov => {
       return (
         <React.Fragment key={mov.imdbID}>
-          <ListItem alignItems="flex-start" classes={{root: classes.listRoot}}>
+          <ListItem alignItems="flex-start"
+            classes={{
+              root: classes.listRoot,
+            }}
+          >
             <ListItemAvatar>
-              <Avatar classes={{root: classes.avatarRoot}} alt="Remy Sharp" src={mov.Poster} />
+              <Avatar classes={{ root: classes.avatarRoot }} alt="Remy Sharp" src={mov.Poster} />
             </ListItemAvatar>
             <ListItemText
-              primary={`Title : ${limitTitle(mov.Title)}`}
+              primary={<h2 className={classes.mTitle}>{`Title : ${limitTitle(mov.Title)}`}</h2>}
               secondary={
                 <Typography
                   component="span"
                   variant="body2"
                   className={classes.inline}
-                  color="textPrimary"
+                  color="inherit"
                 >
-                  {`Actors : ${limitTitle(mov.Actors, 40)}`}
+                  {<p>{`Actors : ${limitTitle(mov.Actors, 40)}`}</p>}
                 </Typography>
               }
             />
@@ -114,3 +128,5 @@ export default function AlignItemsList({ movieData }) {
     </List>
   )
 }
+
+export default AlignItemsList

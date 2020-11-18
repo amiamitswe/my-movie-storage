@@ -122,6 +122,7 @@ export default function PrimarySearchAppBar(props) {
       <AppBar position="static" style={{ backgroundColor: '#2a2d3c' }}>
         <Toolbar>
           <IconButton
+            onClick={props.goHome}
             edge="start"
             className={classes.homeButton}
             color="inherit"
@@ -129,7 +130,7 @@ export default function PrimarySearchAppBar(props) {
           >
             <HomeIcon />
           </IconButton>
-          <Typography onClick={props.goHome} className={classes.title} variant="h6" noWrap>
+          <Typography className={classes.title} variant="h6" noWrap>
             My Movie Storages
           </Typography>
           <div className={classes.search}>
@@ -142,6 +143,7 @@ export default function PrimarySearchAppBar(props) {
               inputProps={{ 'aria-label': 'search' }}
               onChange={props.searchMovie}
               onKeyDown={props.onKeyEnter}
+              value={props.inputValue}
             />
           </div>
           <IconButton

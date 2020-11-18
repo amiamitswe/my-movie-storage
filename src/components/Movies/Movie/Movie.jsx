@@ -6,10 +6,13 @@ import ThemeMood from '../../../context/Context'
 import IMG from '../../../assets/IMG/move_if_not_found.jpg'
 import classes from './Movie.module.css'
 
+// get props as object alternative of props using {}
 const Movie = ({ movieTitle, moviePostal, movieYear, movieType, ifFavorite, setFavorite, handleOpen }) => {
 
   const themeMood = useContext(ThemeMood).darkMood
 
+
+  // function for title limite
   const limitTitle = (text, value = 30) => {
     const result = []
     if (movieTitle) {
@@ -31,10 +34,10 @@ const Movie = ({ movieTitle, moviePostal, movieYear, movieType, ifFavorite, setF
     <div className={classes.Movie}>
       <div className={classes.FevoritWrap}>
         <h1 onClick={handleOpen}>{limitTitle(movieTitle)}</h1>
-        <FavoriteIcon 
-        onClick={setFavorite} 
-        style={{ color: ifFavorite ? '#fd0939c9' : themeMood ? '#fff' : '#4a4c5a' }} 
-        className={classes.Fevorit} />
+        <FavoriteIcon
+          onClick={setFavorite}
+          style={{ color: ifFavorite ? '#fd0939c9' : themeMood ? '#fff' : '#4a4c5a' }}
+          className={classes.Fevorit} />
 
       </div>
       <div onClick={handleOpen} >
@@ -46,6 +49,8 @@ const Movie = ({ movieTitle, moviePostal, movieYear, movieType, ifFavorite, setF
   )
 }
 
+
+// check props types
 Movie.propTypes = {
   movieTitle: PropTypes.string,
   handleOpen: PropTypes.func.isRequired,

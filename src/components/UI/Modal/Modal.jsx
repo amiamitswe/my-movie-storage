@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   paper: {
-    // backgroundColor: theme.palette.background.paper,
     width: '80%',
     height: '80%',
     overflowY: 'auto',
@@ -25,16 +24,6 @@ const useStyles = makeStyles((theme) => ({
 export default function TransitionsModal(props) {
   const classes = useStyles()
   const themeData = useContext(ThemeContext)
-  // const [open, setOpen] = React.useState(false);
-
-  // const handleOpen = () => {
-  //   setOpen(true);
-  // };
-
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
-
 
   let style = {
     color: '#050505',

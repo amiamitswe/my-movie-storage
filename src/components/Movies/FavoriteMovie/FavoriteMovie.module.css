@@ -21,14 +21,21 @@
   position: fixed;
   right: 35px;
   z-index: 99;
-  min-width: 320px;
+  width: 320px;
 }
 
 @media (max-width: 767px) {
   .FavoriteList {
     right: 11px;
   }
+
+  .FMovieList {
+    width: 80%;
+    right: 0;
+    transform: translate(-13%, 0);
+  }
 }
+
 
 @keyframes favoriteAnimation {
   0%   {transform: scale(1);}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { API } from '../../../API/API'
 
 import axios from '../../../axios-orders'
 import { Spinner2 } from '../../UI/Spinner/Spinner'
@@ -11,17 +12,18 @@ const ModalMovie = (props) => {
   const [movieData, setMovieData] = useState()
   const [errorMsg, setErrorMsg] = useState(null)
 
+  // get ingo according to movie id
   useEffect(() => {
-    const API_KEY = '747adb9e'
+    const API_KEY = API
     const MOVIE_ID = props.dataInfo
-    
+
     axios.get(`/?i=${MOVIE_ID}&apikey=${API_KEY}`)
       .then(res => setMovieData(res.data))
       .catch(err => setErrorMsg(err.message))
 
-      return () => {
-        setMovieData(null)
-      }
+    return () => {
+      setMovieData(null)
+    }
   }, [props.dataInfo])
 
 
@@ -38,7 +40,7 @@ const ModalMovie = (props) => {
 
           <div className={classes.MoviePostal}>
             <img src={movieData.Poster !== 'N/A' ? movieData.Poster : IMG} alt={movieData.Title} />
-            <h1 style={{textAlign: 'center'}}>{movieData.Year}</h1>
+            <h1 style={{ textAlign: 'center' }}>{movieData.Year}</h1>
           </div>
 
           <div className={classes.Info}>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
+import { API } from '../../API/API'
 import axios from '../../axios-orders'
 
 import Movie from './Movie/Movie'
@@ -8,13 +9,17 @@ import Modal from '../UI/Modal/Modal'
 import ModalMovie from './ModalMovie/ModalMovie'
 import SearchMovie from '../../context/Context'
 import FavoriteList from './FavoriteMovie/FavoriteMovie'
+import ThemeMood from '../../context/Context'
 import classes from './Movies.module.css'
 
-const Movies = () => {
+const Movies = (props) => {
 
+  // get context data
   const searchMovie = useContext(SearchMovie).searchMovie
   const movieByYear = useContext(SearchMovie).movieByYear
+  const themeMood = useContext(ThemeMood).darkMood
 
+  // use state
   const [movie, setMovie] = useState([])
   const [errormsg, setErrormsg] = useState()
   const [open, setOpen] = useState(false)
@@ -23,27 +28,36 @@ const Movies = () => {
   const [searchByMovie, setSearchByMovie] = useState(null)
   const [favoriteID, setFavoriteID] = useState([])
 
-  const API_KEY = '747adb9e'
+  // default movie name for search
+  let series = ['marvel', 'avengers', 'iron man', 'harry potter', '3 idiots']
 
+
+  // api key
+  const API_KEY = API
+
+  // set context year to setYear
   if (year !== movieByYear) {
     setyear(movieByYear)
   }
 
+  // set context search movie to state
   if (searchByMovie !== searchMovie) {
     setSearchByMovie(searchMovie)
   }
 
+  // open modal
   const handleOpen = (id) => {
     setOpen(true)
     setSelectMovie(id)
   }
 
+  // close modal
   const handleClose = () => {
     setOpen(false)
   }
 
+  // search default movies
   const defaultMovie = () => {
-    let series = ['marvel', 'avengers', 'iron man', 'harry potter', '3 idiots']
     const promise = series.map(series => {
       return axios.get(`/?apikey=${API_KEY}&s=${encodeURIComponent(series)}`)
         .then(res => res.data.Search)
@@ -55,31 +69,25 @@ const Movies = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }
 
-  const searchForMovie = () => {
-    axios.get(`/?apikey=${API_KEY}&s=${encodeURIComponent(searchByMovie)}`)
-      .then((rs) => !rs.data.hasOwnProperty('Error') ? setMovie(rs.data.Search) : setMovie(''))
-      .catch(error => setErrormsg(error.message))
-  }
 
+  // search by movie name and relese year
   const searchForMovieWithYear = () => {
     axios.get(`/?apikey=${API_KEY}&s=${encodeURIComponent(searchByMovie)}&y=${year}`)
       .then((rs) => !rs.data.hasOwnProperty('Error') ? setMovie(rs.data.Search) : setMovie(''))
-      .catch(error => setErrormsg(error.message))
+      .catch(error => setErrormsg(error))
   }
 
 
+  // use effect
   useEffect(() => {
-    if (movieByYear !== '') {
+    if (searchByMovie !== null) {
       searchForMovieWithYear()
+      return
     }
 
-    else if (searchByMovie !== null) {
-      searchForMovie()
-    }
-    else {
-      defaultMovie()
-    }
+    defaultMovie()
 
+    // set movie and year to empty
     return () => {
       setMovie([])
       setyear()
@@ -87,25 +95,24 @@ const Movies = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchByMovie, movieByYear])
 
-
+  // set favorite movie
   const setFavoritehandler = (id) => {
     const favoriteData = [...favoriteID]
-
     const findFavoritID = favoriteData.findIndex(el => el === id)
 
     if (findFavoritID === -1) {
       favoriteData.push(id)
-    }
-
-    else {
+    } else {
       favoriteData.splice(findFavoritID, 1)
     }
 
     setFavoriteID(favoriteData)
   }
 
+  // check favorite movie is already there or not
   const checkfavoriteID = (id) => favoriteID.some(el => el === id)
 
+  // render movie data 
   const renderMovies = (mov, index) => {
     return <Movie
       style={{ zIndex: '9999' }}
@@ -119,14 +126,16 @@ const Movies = () => {
       handleOpen={() => handleOpen(mov.imdbID)} />
   }
 
-
   let movieData = <Spinner />
+
+  // check is movie and year is empty
   if (searchByMovie === null && movieByYear === '') {
     if (errormsg) {
       movieData = <Error>{errormsg.message}</Error>
     }
     else {
-      if (movie.length > 0) {
+      // check movie length and data inside movie is array
+      if (movie.length > 0 && Array.isArray(movie[0])) {
         movieData = movie.map(res => res.map((mov, index) => (
           renderMovies(mov, index)
         )))
@@ -136,13 +145,30 @@ const Movies = () => {
 
   else {
     if (movie === "") {
-      movieData = <Error>No MOVIES found in this name "<b>
-        <u>{searchByMovie}</u></b>{year !== '' ?
-          <span>" in "<b><u>{year}</u></b>" year </span> : null} Sorry !!! </Error>
+
+      // go home button style
+      const goHomeStyle = [classes.GoHomeBTN]
+      if (themeMood) {
+        goHomeStyle.push(classes.GHDark)
+      }
+      else {
+        goHomeStyle.push(classes.GHReg)
+      }
+
+      // error message if movie not found
+      movieData =
+        <React.Fragment>
+          <Error>No MOVIES found in this name "<b>
+            <u>{searchByMovie}</u></b>{year !== '' ?
+              <span>" in "<b><u>{year}</u></b>" year </span> : null} Sorry !!! </Error>
+          <button className={goHomeStyle.join(' ')} onClick={props.goHome} >
+            Go Home...
+          </button>
+        </React.Fragment>
     }
     else {
       if (errormsg) {
-        movieData = <Error>{errormsg}</Error>
+        movieData = <Error>{errormsg.message}</Error>
       }
 
       if (movie.length > 0) {

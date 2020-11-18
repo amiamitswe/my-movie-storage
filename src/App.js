@@ -13,6 +13,9 @@ function App() {
   const [passMovieName, setPassMovieName] = useState(null)
   const [year, setYear] = React.useState('')
   const [yearCheck, setYearCheck] = useState(false)
+  const [isAtHome, setIsAtHome] = useState(true)
+
+  let inputValue = searchMovie
 
   const darkMoodHandler = () => {
     setDarkMood(!darkMood)
@@ -20,7 +23,7 @@ function App() {
 
   const searchMovieHandler = (event) => {
     setSearchMovie(event.target.value.trim())
-
+    setIsAtHome(false)
     if (event.target.value === '') {
       setYearCheck(false)
     }
@@ -44,13 +47,19 @@ function App() {
   }
 
   const goHomeHandler = () => {
-    console.log('Commint soon')
+    if (!isAtHome) {
+      console.log('At Home Page....')
+      setPassMovieName(null)
+      setYear('')
+      setSearchMovie('')
+      setYearCheck(false)
+      setIsAtHome(true)
+    }
   }
 
   const onYearChangeHandler = (event) => {
     setYear(event.target.value)
   }
-
 
   let darkTheme = ['App']
   if (darkMood) {
@@ -72,6 +81,7 @@ function App() {
         selectYear={onYearChangeHandler}
         enableYear={yearCheck}
         year={year}
+        inputValue={inputValue}
       />
       <ThemeContext.Provider
         value={{
@@ -80,7 +90,7 @@ function App() {
           movieByYear: year
         }}
       >
-        <Movies />
+        <Movies goHome={goHomeHandler} />
       </ThemeContext.Provider>
     </div>
   )
