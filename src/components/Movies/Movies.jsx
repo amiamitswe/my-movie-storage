@@ -29,7 +29,18 @@ const Movies = (props) => {
   const [favoriteID, setFavoriteID] = useState([])
 
   // default movie name for search
-  let series = ['marvel', 'avengers', 'iron man', 'harry potter', '3 idiots']
+  let series = [
+    ['marvel', 'avengers', 'iron man'],
+    ['good','3 idiots', 'omg', 'yes'],
+    ['harry potter', 'black', 'bad'],
+    ['red', 'teri', 'i love you'],
+    ['chaplin','Titanic','jackie'],
+    ['who am i','mission','The Terminator'],
+    ['Transformers','hit man','Shooter'],
+    ['michael','robot','earth'],
+    ['galaxy','sky','door'],
+    ['welcome','joy','love']
+  ]
 
 
   // api key
@@ -58,7 +69,8 @@ const Movies = (props) => {
 
   // search default movies
   const defaultMovie = () => {
-    const promise = series.map(series => {
+    const ren = (Math.floor(Math.random() * series.length))
+    const promise = series[ren].map(series => {
       return axios.get(`/?apikey=${API_KEY}&s=${encodeURIComponent(series)}`)
         .then(res => res.data.Search)
     })
