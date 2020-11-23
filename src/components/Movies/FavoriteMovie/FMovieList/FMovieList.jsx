@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { API } from '../../../../API/API'
 
+import limitTitle from '../../../../Helper/LimiteTitle'
 import axios from '../../../../axios-orders'
 import { Spinner2 } from '../../../UI/Spinner/Spinner'
 import { makeStyles } from '@material-ui/core/styles'
@@ -69,21 +70,6 @@ const AlignItemsList = ({ movieData }) => {
       .catch(err => console.log(err.message))
   }, [MOVIE_IDs])
 
-
-  // title limit
-  const limitTitle = (text, value = 20) => {
-    const result = []
-    if (text.length > value) {
-      text.split(' ').reduce((acc, cur) => {
-        if (acc + cur.length <= value) {
-          result.push(cur)
-        }
-        return acc += cur.length
-      }, 0)
-      return (result.join(' ') + ' ...')
-    }
-    return text
-  }
 
   let renderFMovieData
 

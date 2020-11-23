@@ -1,34 +1,17 @@
 import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
-import FavoriteIcon from '@material-ui/icons/Favorite'
 
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import limitTitle from '../../../Helper/LimiteTitle'
 import ThemeMood from '../../../context/Context'
 import IMG from '../../../assets/IMG/move_if_not_found.jpg'
 import classes from './Movie.module.css'
+
 
 // get props as object alternative of props using {}
 const Movie = ({ movieTitle, moviePostal, movieYear, movieType, ifFavorite, setFavorite, handleOpen }) => {
 
   const themeMood = useContext(ThemeMood).darkMood
-
-
-  // function for title limite
-  const limitTitle = (text, value = 30) => {
-    const result = []
-    if (movieTitle) {
-      if (text.length > value) {
-        text.split(' ').reduce((acc, cur) => {
-          if (acc + cur.length <= value) {
-            result.push(cur)
-          }
-          return acc += cur.length
-        }, 0)
-        return (result.join(' ') + ' ...')
-      }
-    }
-    return text
-  }
-
 
   return (
     <div className={classes.Movie}>

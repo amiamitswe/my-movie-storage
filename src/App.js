@@ -22,7 +22,12 @@ function App() {
   }
 
   const searchMovieHandler = (event) => {
-    setSearchMovie(event.target.value.trim())
+    if (searchMovie.length === 0) {
+      setSearchMovie(event.target.value.trim())
+    }
+    else {
+      setSearchMovie(event.target.value)
+    }
     setIsAtHome(false)
     if (event.target.value === '') {
       setYearCheck(false)
